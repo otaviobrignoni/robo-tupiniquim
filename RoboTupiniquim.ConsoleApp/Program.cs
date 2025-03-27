@@ -4,9 +4,11 @@ internal class Program
 {
     static void Main(string[] args)
     {
+        string instructions = GlobalUtils.GetValidIntructions();
+        Console.WriteLine(instructions);
         Grid.SetGridSize(GlobalUtils.GetValidGridSize());
 
-        Robot.ExecuteInstructions("MDMMEM");
+
         
         Console.ReadKey();
     }

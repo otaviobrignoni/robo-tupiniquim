@@ -5,6 +5,18 @@ namespace RoboTupiniquim.ConsoleApp;
 class GlobalUtils
 {
 
+    public static string GetValidRobotPosition()
+    {
+        Console.Write("Digite o ponto de origem e o sentido do robô (x, y, N|S|L|O) -> ");
+        string robotPosition = GetNonNullString();
+        while (!Regex.IsMatch(robotPosition, @"^\d+[,. ]+\d+[,. ]+[nslo]$", RegexOptions.IgnoreCase))
+        {
+            Console.Write("Formato de entrada inválido, tente novamente -> ");
+            robotPosition = GetNonNullString();
+        }
+        return robotPosition;
+    }
+
     public static string GetValidIntructions()
     {
         Console.Write("Digite a sequência instruções do robo (D, E ou M) -> ");
@@ -28,6 +40,7 @@ class GlobalUtils
         }
         return gridSize;
     }
+
     static string GetNonNullString()
     {
         string @string = Console.ReadLine()!;
@@ -37,14 +50,5 @@ class GlobalUtils
             @string = Console.ReadLine()!;
         }
         return @string;
-    }
-
-    public static int GetInt()
-    {
-        int number;
-        Console.Write("Digite um número -> ");
-        while (!int.TryParse(Console.ReadLine(), out number))
-            Console.Write("Número inválido, tente novamente -> ");
-        return number;
     }
 }

@@ -1,18 +1,26 @@
-﻿namespace RoboTupiniquim.ConsoleApp;
+﻿using System.Text.RegularExpressions;
+
+namespace RoboTupiniquim.ConsoleApp;
 
 class Robot
 {
 
-    public Robot(int posX, int posY, char direction)
+    public Robot()
     {
-        Robot.posX = posX;
-        Robot.posY = posY;
-        Robot.direction = direction;
+
     }
 
     static int posX;
     static int posY;
     static char direction;
+
+    public static void SetRobotPosition(string robotPosition)
+    {
+        string[] robotPositionArray = Regex.Split(robotPosition, @"[,. ]+");
+        posX = int.Parse(robotPositionArray[0]);
+        posY = int.Parse(robotPositionArray[1]);
+        direction = robotPositionArray[2][0];
+    }
 
     public static void ExecuteInstructions(string instructions)
     {

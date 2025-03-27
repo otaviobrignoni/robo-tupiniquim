@@ -1,4 +1,6 @@
-﻿namespace RoboTupiniquim.ConsoleApp;
+﻿using System.Text.RegularExpressions;
+
+namespace RoboTupiniquim.ConsoleApp;
 
 class Grid
 {
@@ -7,7 +9,7 @@ class Grid
     
     public static void SetGridSize(string axisSizes)
     {
-        string[] axisSizeArray = axisSizes.Split(' ');
+        string[] axisSizeArray = Regex.Split(axisSizes, @"[,. ]+");
         axisSizeX = Convert.ToInt32(axisSizeArray[0]);
         axisSizeY = Convert.ToInt32(axisSizeArray[1]);
     }
@@ -22,3 +24,4 @@ class Grid
         return axisSizeY;
     }
 }
+    

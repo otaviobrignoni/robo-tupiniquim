@@ -2,96 +2,103 @@
 
 class Robot
 {
-    static int gridX;
-    static int gridY;
-    static int robotPosX;
-    static int robotPosY;
-    static char robotDirection = 'N';
+
+    public Robot(int posX, int posY, char direction)
+    {
+        Robot.posX = posX;
+        Robot.posY = posY;
+        Robot.direction = direction;
+    }
+
+    static int posX;
+    static int posY;
+    static char direction;
 
     public static void ExecuteInstructions(string instructions)
     {
+        int gridSizeX = Grid.GetSizeX();
+        int gridSizeY = Grid.GetSizeY();
         for (int i = 0; i < instructions.Length; i++)
         {
             switch (instructions[i])
             {
                 case 'M':
-                    switch (robotDirection)
+                    switch (direction)
                     {
                         case 'N':
-                            if (robotPosX + 1 > gridX)
+                            if (posX + 1 > gridSizeX)
                             {
                                 Console.WriteLine("Insturções Inválidas");
                                 return;
                             }
                             else
-                                robotPosX++;
+                                posX++;
                             break;
                         case 'S':
-                            if (robotPosX - 1 < 0)
+                            if (posX - 1 < 0)
                             {
                                 Console.WriteLine("Insturções Inválidas");
                                 return;
                             }
                             else
-                                robotPosX--;
+                                posX--;
                             break;
                         case 'L':
-                            if (robotPosY + 1 > gridY)
+                            if (posY + 1 > gridSizeY)
                             {
                                 Console.WriteLine("Insturções Inválidas");
                                 return;
                             }
                             else
-                                robotPosY++;
+                                posY++;
                             break;
                         case 'O':
-                            if (robotPosY - 1 < 0)
+                            if (posY - 1 < 0)
                             {
                                 Console.WriteLine("Insturções Inválidas");
                                 return;
                             }
                             else
-                                robotPosY--;
+                                posY--;
                             break;
                     }
                     break;
                 case 'E':
-                    switch (robotDirection)
+                    switch (direction)
                     {
                         case 'N':
-                            robotDirection = 'O';
+                            direction = 'O';
                             break;
                         case 'S':
-                            robotDirection = 'L';
+                            direction = 'L';
                             break;
                         case 'L':
-                            robotDirection = 'N';
+                            direction = 'N';
                             break;
                         case 'O':
-                            robotDirection = 'S';
+                            direction = 'S';
                             break;
 
                     }
                     break;
                 case 'D':
-                    switch (robotDirection)
+                    switch (direction)
                     {
                         case 'N':
-                            robotDirection = 'L';
+                            direction = 'L';
                             break;
                         case 'S':
-                            robotDirection = 'O';
+                            direction = 'O';
                             break;
                         case 'L':
-                            robotDirection = 'S';
+                            direction = 'S';
                             break;
                         case 'O':
-                            robotDirection = 'N';
+                            direction = 'N';
                             break;
                     }
                     break;
             }
         }
-        Console.WriteLine($"{robotPosX}, {robotPosY}, {robotDirection}");
     }
 }

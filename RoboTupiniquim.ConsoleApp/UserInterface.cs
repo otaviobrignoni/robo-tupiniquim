@@ -69,6 +69,7 @@ class UserInterface
                     if (currentInstructions == "Sem instruções")
                     {
                         RobotUtils.RobotInfo("noInstructions");
+                        GlobalUtils.AnyKeyPrompt();
                         break;
                     }
                     Robot.ExecuteInstructions(currentInstructions, out bool validInstructions);

@@ -71,6 +71,7 @@ class RobotUtils
 
     public static void InvalidInstructuions(string direction)
     {
+        Console.Clear();
         Console.WriteLine($"Insturções inválidas, robô tentou sair do grid pelo {direction}");
     }
 

@@ -10,8 +10,8 @@ class Grid
     public static void SetGridSize(string axisSizes)
     {
         string[] axisSizeArray = Regex.Split(axisSizes, @"[,. ]+");
-        axisSizeX = Convert.ToInt32(axisSizeArray[0]);
-        axisSizeY = Convert.ToInt32(axisSizeArray[1]);
+        axisSizeX = int.Parse(axisSizeArray[0]);
+        axisSizeY = int.Parse(axisSizeArray[1]);
     }
     
     public static int GetSizeX()

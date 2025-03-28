@@ -21,7 +21,7 @@ class GlobalUtils
     {
         Console.Write("Digite a sequência instruções do robo (D, E ou M) -> ");
         string instructions = GetNonNullString();
-        while (!Regex.IsMatch(instructions, @"[dem]+", RegexOptions.IgnoreCase))
+        while (!Regex.IsMatch(instructions, @"^[dem]$+", RegexOptions.IgnoreCase))
         {
             Console.Write("Formato de entrada inválido (formato aceito: EMMDMEMEMDM), tente novamente -> ");
             instructions = GetNonNullString();

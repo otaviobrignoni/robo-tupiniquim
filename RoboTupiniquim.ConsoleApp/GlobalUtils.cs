@@ -7,6 +7,7 @@ class GlobalUtils
 
     public static string GetValidRobotPosition()
     {
+        Console.Clear();
         Console.Write("Digite o ponto de origem e o sentido do robô (x, y, N|S|L|O) -> ");
         string robotPosition = GetNonNullString();
         while (!Regex.IsMatch(robotPosition, @"^\d+[,. ]+\d+[,. ]+[nslo]$", RegexOptions.IgnoreCase))
@@ -19,18 +20,20 @@ class GlobalUtils
 
     public static string GetValidIntructions()
     {
+        Console.Clear();
         Console.Write("Digite a sequência instruções do robo (D, E ou M) -> ");
         string instructions = GetNonNullString();
-        while (!Regex.IsMatch(instructions, @"^[dem]$+", RegexOptions.IgnoreCase))
+        while (!Regex.IsMatch(instructions, @"^[dem]+?$", RegexOptions.IgnoreCase))
         {
             Console.Write("Formato de entrada inválido (formato aceito: EMMDMEMEMDM), tente novamente -> ");
             instructions = GetNonNullString();
         }
-        return instructions;
+        return instructions.ToUpper();
     }
 
     public static string GetValidGridSize()
     {
+        Console.Clear();
         Console.Write("Digite o tamanho do grid (\"x, y\") -> ");
         string gridSize = GetNonNullString();
         while (!Regex.IsMatch(gridSize, @"^\d+[,. ]+\d+$"))
@@ -50,5 +53,10 @@ class GlobalUtils
             @string = Console.ReadLine()!;
         }
         return @string;
+    }
+    
+    public class Text
+    {
+
     }
 }

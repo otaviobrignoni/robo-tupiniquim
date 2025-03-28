@@ -13,13 +13,15 @@ class Robot
     static int posX;
     static int posY;
     static char direction;
+    public static bool positionSet = false;
 
     public static void SetRobotPosition(string robotPosition)
     {
         string[] robotPositionArray = Regex.Split(robotPosition, @"[,. ]+");
         posX = int.Parse(robotPositionArray[0]);
         posY = int.Parse(robotPositionArray[1]);
-        direction = robotPositionArray[2][0];
+        direction = robotPositionArray[2].ToUpper()[0];
+        positionSet = true;
     }
 
     public static void ExecuteInstructions(string instructions)
@@ -34,40 +36,40 @@ class Robot
                     switch (direction)
                     {
                         case 'N':
-                            if (posX + 1 > gridSizeX)
-                            {
-                                Console.WriteLine("Insturções Inválidas");
-                                return;
-                            }
-                            else
-                                posX++;
-                            break;
-                        case 'S':
-                            if (posX - 1 < 0)
-                            {
-                                Console.WriteLine("Insturções Inválidas");
-                                return;
-                            }
-                            else
-                                posX--;
-                            break;
-                        case 'L':
                             if (posY + 1 > gridSizeY)
                             {
-                                Console.WriteLine("Insturções Inválidas");
+                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo norte");
                                 return;
                             }
                             else
                                 posY++;
                             break;
-                        case 'O':
+                        case 'S':
                             if (posY - 1 < 0)
                             {
-                                Console.WriteLine("Insturções Inválidas");
+                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo sul");
                                 return;
                             }
                             else
                                 posY--;
+                            break;
+                        case 'L':
+                            if (posX + 1 > gridSizeY)
+                            {
+                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo leste");
+                                return;
+                            }
+                            else
+                                posX++;
+                            break;
+                        case 'O':
+                            if (posX - 1 < 0)
+                            {
+                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo oeste");
+                                return;
+                            }
+                            else
+                                posX--;
                             break;
                     }
                     break;
@@ -109,4 +111,11 @@ class Robot
             }
         }
     }
+
+    public static string GetCurrentPosition()
+    {
+        return $"{posX}, {posY}, {direction}";
+    }
+
+    
 }

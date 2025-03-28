@@ -1,62 +1,58 @@
-﻿using System.Text.RegularExpressions;
-
-namespace RoboTupiniquim.ConsoleApp;
-
-class GlobalUtils
+﻿namespace RoboTupiniquim.ConsoleApp
 {
-
-    public static string GetValidRobotPosition()
+    class GlobalUtils
     {
-        Console.Clear();
-        Console.Write("Digite o ponto de origem e o sentido do robô (x, y, N|S|L|O) -> ");
-        string robotPosition = GetNonNullString();
-        while (!Regex.IsMatch(robotPosition, @"^\d+[,. ]+\d+[,. ]+[nslo]$", RegexOptions.IgnoreCase))
+        public static void Header(string title)
         {
-            Console.Write("Formato de entrada inválido, tente novamente -> ");
-            robotPosition = GetNonNullString();
+            const int menuWidth = 28;
+            int padding = (menuWidth - title.Length) / 2;
+            Console.Clear();
+            Console.WriteLine("┌" + new string('─', menuWidth) + "┐");
+            Console.WriteLine("│" + title.PadLeft(padding + title.Length).PadRight(menuWidth) + "│");
+            Console.WriteLine("└" + new string('─', menuWidth) + "┘");
+            Console.WriteLine();
         }
-        return robotPosition;
-    }
 
-    public static string GetValidIntructions()
-    {
-        Console.Clear();
-        Console.Write("Digite a sequência instruções do robo (D, E ou M) -> ");
-        string instructions = GetNonNullString();
-        while (!Regex.IsMatch(instructions, @"^[dem]+?$", RegexOptions.IgnoreCase))
+        public static string GetNonNullString()
         {
-            Console.Write("Formato de entrada inválido (formato aceito: EMMDMEMEMDM), tente novamente -> ");
-            instructions = GetNonNullString();
+            string @string = Console.ReadLine()!;
+            while (string.IsNullOrWhiteSpace(@string))
+            {
+                InvalidEntry();
+                @string = Console.ReadLine()!;
+            }
+            return @string;
         }
-        return instructions.ToUpper();
-    }
 
-    public static string GetValidGridSize()
-    {
-        Console.Clear();
-        Console.Write("Digite o tamanho do grid (\"x, y\") -> ");
-        string gridSize = GetNonNullString();
-        while (!Regex.IsMatch(gridSize, @"^\d+[,. ]+\d+$"))
+        public static void AnyKeyPrompt()
         {
-            Console.Write("Formato de entrada inválido, tente novamente -> ");
-            gridSize = GetNonNullString();
+            Console.WriteLine();
+            Console.WriteLine("Pressione qualquer tecla para continuar...");
+            Console.ReadKey();
         }
-        return gridSize;
-    }
 
-    static string GetNonNullString()
-    {
-        string @string = Console.ReadLine()!;
-        while (string.IsNullOrWhiteSpace(@string))
+        public static void InvalidEntry()
         {
             Console.Write("Entrada inválida, tente novamente -> ");
-            @string = Console.ReadLine()!;
         }
-        return @string;
-    }
-    
-    public class Text
-    {
 
+        public static bool LeavePrompt()
+        {
+            Console.Clear();
+            Console.Write("Você realmente quer sair? (S/N) -> ");
+            string userInput = Console.ReadLine()!;
+            while (userInput != "S" && userInput != "N" && userInput != "s" && userInput != "n" || (userInput == null))
+            {
+                Console.Write("Opção inválida, tente novamente -> ");
+                userInput = Console.ReadLine()!;
+            }
+            return userInput.ToUpper()[0] == 'S';
+        }
+
+        public static void ShowGridSize(string gridSize)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Grid atual: {gridSize}");
+        }
     }
 }

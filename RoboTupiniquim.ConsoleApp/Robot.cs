@@ -24,10 +24,19 @@ class Robot
         positionSet = true;
     }
 
-    public static void ExecuteInstructions(string instructions)
+    public static void ResetPos()
+    {
+        posX = -1;
+        posY = -1;
+        direction = ' ';
+        positionSet = false;
+    }
+
+    public static void ExecuteInstructions(string instructions, out bool validInstructions)
     {
         int gridSizeX = Grid.GetSizeX();
         int gridSizeY = Grid.GetSizeY();
+        validInstructions = true;
         for (int i = 0; i < instructions.Length; i++)
         {
             switch (instructions[i])
@@ -38,38 +47,38 @@ class Robot
                         case 'N':
                             if (posY + 1 > gridSizeY)
                             {
-                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo norte");
+                                RobotUtils.InvalidInstructuions("norte");
+                                validInstructions = false;
                                 return;
                             }
-                            else
-                                posY++;
+                            posY++;
                             break;
                         case 'S':
                             if (posY - 1 < 0)
                             {
-                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo sul");
+                                RobotUtils.InvalidInstructuions("sul");
+                                validInstructions = false;
                                 return;
                             }
-                            else
-                                posY--;
+                            posY--;
                             break;
                         case 'L':
                             if (posX + 1 > gridSizeY)
                             {
-                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo leste");
+                                RobotUtils.InvalidInstructuions("leste");
+                                validInstructions = false;
                                 return;
                             }
-                            else
-                                posX++;
+                            posX++;
                             break;
                         case 'O':
                             if (posX - 1 < 0)
                             {
-                                Console.WriteLine("Insturções inválidas, robô tentou sair do grid pelo oeste");
+                                RobotUtils.InvalidInstructuions("oeste");
+                                validInstructions = false;
                                 return;
                             }
-                            else
-                                posX--;
+                            posX--;
                             break;
                     }
                     break;
@@ -117,5 +126,5 @@ class Robot
         return $"{posX}, {posY}, {direction}";
     }
 
-    
+
 }

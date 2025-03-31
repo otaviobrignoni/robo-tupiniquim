@@ -4,6 +4,10 @@ class UserInterface
 {
     static string[] menuOptions = { "Definir Grid", "Controlar Robôs", "Informações", "Sair" };
     static bool exitOptionSelected = false;
+    static Robot robot1 = new Robot();
+    static Robot robot2 = new Robot();
+    static Robot activeRobot = robot1;
+    static int selectedRobot = 1;
 
     public static void ShowMenu()
     {
@@ -37,61 +41,69 @@ class UserInterface
 
     public static void RobotMenu()
     {
-        string[] menuOptions = { "Definir Ponto de Origem", "Enviar Instuções", "Executar Instuções", "Trocar Robô", "Sair" };
-        int selectedOption = 0, selectedRobot = 1;
-        string currentInstructions = "Sem instruções", currentOriginPos = "Não definido";
+        string[] menuOptions = { "Definir Ponto de Origem", "Enviar Instruções", "Executar Instruções", "Trocar Robô", "Sair" };
+        int selectedOption = 0;
+        string currentInstructions = "Sem instruções";
+        string currentOriginPos = "Não definido";
         bool exitOptionSelected = false;
+
         while (!exitOptionSelected)
         {
-
             RenderMenu("Central de Controle", menuOptions, selectedOption);
             RobotUtils.CurrentRobotSettings(selectedRobot, currentOriginPos, currentInstructions);
+
             switch (MenuNavigation(menuOptions.Length, ref selectedOption))
             {
                 case 0:
                     if (!Grid.exists)
                     {
-                        RobotUtils.RobotInfo("noGrid");
+                        RobotUtils.RobotInfo("noGrid", activeRobot);
                         break;
                     }
-                    Robot.SetRobotPosition(RobotUtils.GetValidRobotPosition());
-                    currentOriginPos = Robot.GetCurrentPosition();
+                    activeRobot.SetPosition(RobotUtils.GetValidRobotPosition());
+                    currentOriginPos = activeRobot.GetCurrentPosition();
                     break;
+
                 case 1:
-                    if (!Robot.positionSet)
+                    if (!activeRobot.positionSet)
                     {
-                        RobotUtils.RobotInfo("noPos");
+                        RobotUtils.RobotInfo("noPos", activeRobot);
                         break;
                     }
                     currentInstructions = RobotUtils.GetValidInstructions();
                     break;
+
                 case 2:
                     if (currentInstructions == "Sem instruções")
                     {
-                        RobotUtils.RobotInfo("noInstructions");
+                        RobotUtils.RobotInfo("noInstructions", activeRobot);
                         GlobalUtils.AnyKeyPrompt();
                         break;
                     }
-                    Robot.ExecuteInstructions(currentInstructions, out bool validInstructions);
+                    activeRobot.ExecuteInstructions(currentInstructions, out bool validInstructions);
                     if (validInstructions)
-                        RobotUtils.RobotInfo("showPos");
+                        RobotUtils.RobotInfo("showPos", activeRobot);
                     GlobalUtils.AnyKeyPrompt();
                     Reset();
                     break;
+
                 case 3:
+                    activeRobot = (activeRobot == robot1) ? robot2 : robot1;
                     selectedRobot = (selectedRobot == 1) ? 2 : 1;
                     Reset();
                     break;
+
                 case 4:
                     exitOptionSelected = true;
                     break;
             }
         }
+
         void Reset()
         {
             currentInstructions = "Sem instruções";
             currentOriginPos = "Não definido";
-            Robot.ResetPos();
+            activeRobot.ResetPos();
         }
     }
 

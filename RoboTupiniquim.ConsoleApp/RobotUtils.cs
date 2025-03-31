@@ -80,7 +80,7 @@ class RobotUtils
         Console.Write("Formato de entrada inválido, tente novamente -> ");
     }
 
-    public static void RobotInfo(string type)
+    public static void RobotInfo(string type, Robot activeRobot)
     {
         switch (type)
         {
@@ -103,7 +103,7 @@ class RobotUtils
                 Console.Clear();
                 Console.WriteLine("Instruções executadas.");
                 Console.WriteLine();
-                Console.WriteLine("Posição final do robo: " + Robot.GetCurrentPosition());
+                Console.WriteLine("Posição final do robo: " + activeRobot.GetCurrentPosition());
                 break;
         }
     }

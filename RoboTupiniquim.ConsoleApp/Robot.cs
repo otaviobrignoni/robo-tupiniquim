@@ -7,15 +7,15 @@ class Robot
 
     public Robot()
     {
-
+        positionSet = false;
     }
 
-    static int posX;
-    static int posY;
-    static char direction;
-    public static bool positionSet = false;
+    private int posX;
+    private int posY;
+    private char direction;
+    public bool positionSet { get; private set; }
 
-    public static void SetRobotPosition(string robotPosition)
+    public void SetPosition(string robotPosition)
     {
         string[] robotPositionArray = Regex.Split(robotPosition, @"[,. ]+");
         posX = int.Parse(robotPositionArray[0]);
@@ -24,7 +24,12 @@ class Robot
         positionSet = true;
     }
 
-    public static void ResetPos()
+    public string GetCurrentPosition()
+    {
+        return $"{posX}, {posY}, {direction}";
+    }
+
+    public void ResetPos()
     {
         posX = -1;
         posY = -1;
@@ -32,99 +37,102 @@ class Robot
         positionSet = false;
     }
 
-    public static void ExecuteInstructions(string instructions, out bool validInstructions)
+    public void ExecuteInstructions(string instructions, out bool validInstructions)
     {
-        int gridSizeX = Grid.GetSizeX();
-        int gridSizeY = Grid.GetSizeY();
         validInstructions = true;
-        for (int i = 0; i < instructions.Length; i++)
+        foreach (char command in instructions)
         {
-            switch (instructions[i])
+            if (!ProcessCommand(command))
             {
-                case 'M':
-                    switch (direction)
-                    {
-                        case 'N':
-                            if (posY + 1 > gridSizeY)
-                            {
-                                RobotUtils.InvalidInstructuions("norte");
-                                validInstructions = false;
-                                return;
-                            }
-                            posY++;
-                            break;
-                        case 'S':
-                            if (posY - 1 < 0)
-                            {
-                                RobotUtils.InvalidInstructuions("sul");
-                                validInstructions = false;
-                                return;
-                            }
-                            posY--;
-                            break;
-                        case 'L':
-                            if (posX + 1 > gridSizeY)
-                            {
-                                RobotUtils.InvalidInstructuions("leste");
-                                validInstructions = false;
-                                return;
-                            }
-                            posX++;
-                            break;
-                        case 'O':
-                            if (posX - 1 < 0)
-                            {
-                                RobotUtils.InvalidInstructuions("oeste");
-                                validInstructions = false;
-                                return;
-                            }
-                            posX--;
-                            break;
-                    }
-                    break;
-                case 'E':
-                    switch (direction)
-                    {
-                        case 'N':
-                            direction = 'O';
-                            break;
-                        case 'S':
-                            direction = 'L';
-                            break;
-                        case 'L':
-                            direction = 'N';
-                            break;
-                        case 'O':
-                            direction = 'S';
-                            break;
-
-                    }
-                    break;
-                case 'D':
-                    switch (direction)
-                    {
-                        case 'N':
-                            direction = 'L';
-                            break;
-                        case 'S':
-                            direction = 'O';
-                            break;
-                        case 'L':
-                            direction = 'S';
-                            break;
-                        case 'O':
-                            direction = 'N';
-                            break;
-                    }
-                    break;
+                validInstructions = false;
+                return;
             }
         }
     }
 
-    public static string GetCurrentPosition()
+    private bool ProcessCommand(char command)
     {
-        return $"{posX}, {posY}, {direction}";
+        int gridSizeX = Grid.GetSizeX();
+        int gridSizeY = Grid.GetSizeY();
+        switch (command)
+        {
+            case 'M':
+                return Move(gridSizeX, gridSizeY);
+            case 'E':
+                RotateLeft();
+                return true;
+            case 'D':
+                RotateRight();
+                return true;
+        }
+        return false;
     }
 
+    private bool Move(int gridSizeX, int gridSizeY)
+    {
+        switch (direction)
+        {
+            case 'N':
+                if (posY + 1 > gridSizeY) 
+                    return false; 
+                posY++; 
+                break; 
+            case 'S': 
+                if (posY - 1 < 0) 
+                    return false; 
+                posY--; 
+                break;
+            case 'L': 
+                if (posX + 1 > gridSizeX) 
+                    return false; 
+                posX++; 
+                break;
+            case 'O': 
+                if (posX - 1 < 0) 
+                    return false; 
+                posX--; 
+                break;
+        }
+        return true;
+    }
+
+    private void RotateLeft()
+    {
+        switch (direction)
+        {
+            case 'N':
+                direction = 'O';
+                break;
+            case 'S':
+                direction = 'L';
+                break;
+            case 'L':
+                direction = 'N';
+                break;
+            case 'O':
+                direction = 'S';
+                break;
+
+        }
+    }
+
+    private void RotateRight()
+    {
+        switch (direction)
+        {
+            case 'N':
+                direction = 'L';
+                break;
+            case 'S':
+                direction = 'O';
+                break;
+            case 'L':
+                direction = 'S';
+                break;
+            case 'O':
+                direction = 'N';
+                break;
+        }
+    }
 
 }

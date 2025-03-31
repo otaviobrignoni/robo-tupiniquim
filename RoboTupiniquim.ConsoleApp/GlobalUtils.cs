@@ -54,5 +54,6 @@
             Console.WriteLine();
             Console.WriteLine($"Grid atual: {gridSize}");
         }
+
     }
 }

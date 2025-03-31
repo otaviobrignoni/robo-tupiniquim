@@ -1,16 +1,18 @@
-﻿namespace RoboTupiniquim.ConsoleApp;
+﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace RoboTupiniquim.ConsoleApp;
 
 class UserInterface
 {
     static string[] menuOptions = { "Definir Grid", "Controlar Robôs", "Informações", "Sair" };
     static bool exitOptionSelected = false;
-    static Robot robot1 = new Robot();
-    static Robot robot2 = new Robot();
-    static Robot activeRobot = robot1;
-    static int selectedRobot = 1;
+    static Robot[] robots;
+    static Robot activeRobot;
+    static int selectedRobot = 0;
 
     public static void ShowMenu()
     {
+        GetRobotsNumber();
         string gridSize = "Não definido";
         int selectedOption = 0;
         while (!exitOptionSelected)
@@ -50,7 +52,7 @@ class UserInterface
         while (!exitOptionSelected)
         {
             RenderMenu("Central de Controle", menuOptions, selectedOption);
-            RobotUtils.CurrentRobotSettings(selectedRobot, currentOriginPos, currentInstructions);
+            RobotUtils.CurrentRobotSettings(selectedRobot + 1, currentOriginPos, currentInstructions);
 
             switch (MenuNavigation(menuOptions.Length, ref selectedOption))
             {
@@ -88,8 +90,8 @@ class UserInterface
                     break;
 
                 case 3:
-                    activeRobot = (activeRobot == robot1) ? robot2 : robot1;
-                    selectedRobot = (selectedRobot == 1) ? 2 : 1;
+                    selectedRobot = (selectedRobot + 1) % robots.Length;
+                    activeRobot = robots[selectedRobot];
                     Reset();
                     break;
 
@@ -127,6 +129,25 @@ class UserInterface
         else if (key.Key == ConsoleKey.Enter)
             return selectedOption;
         return -1;
+    }
+
+    public static void GetRobotsNumber()
+    {
+        Console.Clear();
+        Console.Write("Digite quantos robôs você quer controlar -> ");
+        int robotCount;
+
+        while (!int.TryParse(Console.ReadLine(), out robotCount) || robotCount <= 0)
+            Console.Write("Número inválido, tente novamente -> ");
+
+        robots = new Robot[robotCount];
+
+        for (int i = 0; i < robotCount; i++)
+        {
+            robots[i] = new Robot();
+        }
+
+        activeRobot = robots[0];
     }
 
     public static void InfoScreen()
